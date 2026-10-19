@@ -1,10 +1,10 @@
 // Service worker: deixa o app instalável e abre a "casca" mesmo com a rede instável.
 // Nunca guarda chamadas da API (/api/*) — dados sempre vêm do servidor.
-const CACHE = "ecotronic-v1";
+const CACHE = "ecotronic-v2";
 const SHELL = [
   "/", "/index.html", "/usuario.html", "/monitoramento.html",
   "/tailwind.css", "/styles.css", "/usuario.css", "/monitoramento.css",
-  "/config.js", "/api.js", "/app.js", "/usuario.js", "/monitoramento.js", "/pwa.js",
+  "/config.js", "/api.js", "/app.js", "/usuario.js", "/monitoramento.js", "/pwa.js", "/manifest.json", "/manifest-usuario.json", "/manifest-admin.json",
   "/icon-192.png", "/icon-512.png",
 ];
 
