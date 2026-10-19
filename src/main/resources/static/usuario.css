@@ -1,0 +1,54 @@
+/* ===== Ecotronic — Minha Conta ===== */
+
+* { -webkit-tap-highlight-color: transparent; }
+
+body { min-height: 100vh; min-height: 100dvh; }
+
+.section-title {
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: #0F1A16;
+}
+
+#headerUserArea.flex { display: flex; }
+
+/* ---- Cartão de histórico ---- */
+.historico-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid #E7EBE8;
+  border-radius: 12px;
+}
+.historico-item .hi-info { display: flex; flex-direction: column; gap: 2px; }
+.historico-item .hi-categoria {
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  color: #0F1A16;
+}
+.historico-item .hi-data { font-size: 11.5px; color: #6B7280; }
+.historico-item .hi-pontos {
+  font-weight: 700;
+  font-size: 14px;
+  color: #2FAE55;
+  white-space: nowrap;
+}
+
+/* ---- Transições simples de tela ---- */
+#screenAuth, #screenDashboard { animation: fadeUp .28s ease both; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+#editPanel.is-open { display: flex; }
+
+@media (prefers-reduced-motion: reduce) {
+  #screenAuth, #screenDashboard { animation: none !important; }
+}

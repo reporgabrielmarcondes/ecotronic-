@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#2FAE55" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Ecotronic" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" type="image/png" href="icon-192.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<title>Ecotronic Solutions · Painel de Monitoramento</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="tailwind.css" />
+
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="monitoramento.css" />
+</head>
+<body class="bg-fundo text-tinta font-body antialiased overflow-x-hidden">
+
+  <!-- ============ HEADER ============ -->
+  <header class="sticky top-0 z-30 bg-fundo/90 backdrop-blur border-b border-linha">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-5 md:px-8 h-16 md:h-20">
+      <div class="flex items-center gap-3">
+        <svg width="34" height="34" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="2" y="6" width="18" height="6" rx="1" fill="#2FAE55"/>
+          <rect x="2" y="17" width="18" height="6" rx="1" fill="#2FAE55"/>
+          <rect x="2" y="28" width="18" height="6" rx="1" fill="#2FAE55"/>
+          <path d="M27 4 L15 22 H24 L20 36 L34 15 H25 L27 4Z" fill="#12302A"/>
+        </svg>
+        <div class="leading-tight">
+          <p class="font-display font-semibold text-[15px] md:text-base tracking-tight">ecotronic</p>
+          <p class="text-[10px] md:text-[11px] text-cinza -mt-0.5">monitoramento</p>
+        </div>
+      </div>
+
+      <div id="headerActions" class="hidden items-center gap-2 sm:gap-4">
+        <div class="hidden sm:flex items-center gap-2 text-[11px] md:text-xs text-cinza">
+          <span id="statusDot" class="w-2 h-2 rounded-full bg-verde"></span>
+          <span id="statusLabel">Conectado ao servidor</span>
+        </div>
+        <button id="refreshBtn" class="h-9 px-4 rounded-lg bg-tinta text-white text-xs font-semibold hover:bg-verdeescuro transition-colors flex items-center gap-2">
+          <i class="fa-solid fa-rotate"></i>
+          <span class="hidden sm:inline">Atualizar</span>
+        </button>
+        <button id="logoutBtn" class="h-9 px-4 rounded-lg border border-linha text-tinta text-xs font-semibold hover:bg-verdefundo/60 transition-colors flex items-center gap-2">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span class="hidden sm:inline">Sair</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ TELA · LOGIN ADMINISTRATIVO ============ -->
+  <main id="screenAuth" class="max-w-sm mx-auto px-5 pt-16 pb-24">
+    <div class="mb-8 text-center">
+      <span class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-verdefundo text-verdeescuro text-xl mb-4">
+        <i class="fa-solid fa-lock"></i>
+      </span>
+      <p class="text-verde font-semibold text-sm tracking-tight mb-2">Acesso restrito</p>
+      <h1 class="font-display font-semibold text-[24px] leading-[1.15]">Login administrativo</h1>
+      <p class="text-cinza text-[15px] mt-2">Apenas administradores podem ver o painel de monitoramento.</p>
+    </div>
+
+    <div id="authAlert" class="hidden mb-4 rounded-xl bg-vermelhofundo border border-vermelho/30 text-vermelho text-sm px-4 py-3 text-center"></div>
+
+    <form id="authForm" class="flex flex-col gap-4">
+      <div>
+        <label for="authNome" class="text-xs text-cinza block mb-1">Nome de usuário</label>
+        <input id="authNome" type="text" autocomplete="username" required
+          class="w-full h-12 px-4 rounded-xl border border-linha focus:border-verde focus:outline-none" />
+      </div>
+      <div>
+        <label for="authSenha" class="text-xs text-cinza block mb-1">Senha</label>
+        <input id="authSenha" type="password" autocomplete="current-password" required
+          class="w-full h-12 px-4 rounded-xl border border-linha focus:border-verde focus:outline-none" />
+      </div>
+      <button id="authSubmitBtn" type="submit"
+        class="h-12 rounded-xl bg-verde text-white font-semibold text-sm hover:bg-verdeescuro transition-colors flex items-center justify-center gap-2">
+        <span id="authSubmitLabel">Entrar</span>
+        <i class="fa-solid fa-spinner fa-spin hidden" id="authSpinner"></i>
+      </button>
+    </form>
+  </main>
+
+  <div id="screenDashboard" class="hidden">
+  <main class="max-w-7xl mx-auto px-5 md:px-8 pt-8 pb-20">
+
+    <div class="mb-7 md:mb-9">
+      <p class="text-verde font-semibold text-sm tracking-tight mb-2">Painel administrativo</p>
+      <h1 class="font-display font-semibold text-[26px] leading-[1.15] md:text-[32px]">
+        Monitoramento dos descartes
+      </h1>
+      <p class="text-cinza text-[15px] mt-2 max-w-xl">
+        Acompanhe em tempo real os descartes registrados em todos os totens e o total de ecodots distribuídos.
+      </p>
+    </div>
+
+    <!-- ============ FILTROS ============ -->
+    <div class="filter-bar mb-6">
+      <div class="filter-field">
+        <label for="filterTotem">Totem</label>
+        <select id="filterTotem"><option value="">Todos</option></select>
+      </div>
+      <div class="filter-field">
+        <label for="filterCategoria">Categoria</label>
+        <select id="filterCategoria"><option value="">Todas</option></select>
+      </div>
+      <div class="filter-field">
+        <label for="filterInicio">De</label>
+        <input type="date" id="filterInicio" />
+      </div>
+      <div class="filter-field">
+        <label for="filterFim">Até</label>
+        <input type="date" id="filterFim" />
+      </div>
+      <button id="applyFiltersBtn" class="filter-apply">
+        <i class="fa-solid fa-filter"></i> Filtrar
+      </button>
+      <button id="clearFiltersBtn" class="filter-clear">Limpar</button>
+    </div>
+
+    <!-- ============ KPIs ============ -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 md:gap-4 mb-8">
+      <div class="kpi-card">
+        <span class="kpi-icon bg-verdefundo text-verdeescuro"><i class="fa-solid fa-recycle"></i></span>
+        <p class="kpi-value" id="kpiTotalDescartes">—</p>
+        <p class="kpi-label">Descartes registrados</p>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon bg-verdefundo text-verdeescuro"><i class="fa-solid fa-leaf"></i></span>
+        <p class="kpi-value" id="kpiTotalEcodots">—</p>
+        <p class="kpi-label">Ecodots distribuídos</p>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon bg-verdefundo text-verdeescuro"><i class="fa-solid fa-plug-circle-bolt"></i></span>
+        <p class="kpi-value" id="kpiTotens">—</p>
+        <p class="kpi-label">Totens ativos</p>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-icon bg-verdefundo text-verdeescuro"><i class="fa-solid fa-trophy"></i></span>
+        <p class="kpi-value text-[19px] md:text-[22px]" id="kpiTopCategoria">—</p>
+        <p class="kpi-label">Categoria mais descartada</p>
+      </div>
+    </div>
+
+    <!-- ============ GRÁFICOS ============ -->
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-8">
+      <div class="chart-card lg:col-span-3">
+        <p class="chart-title">Descartes por dia</p>
+        <div class="chart-wrap"><canvas id="chartDiario"></canvas></div>
+      </div>
+      <div class="chart-card lg:col-span-2">
+        <p class="chart-title">Ecodots por categoria</p>
+        <div class="chart-wrap"><canvas id="chartCategorias"></canvas></div>
+      </div>
+    </div>
+
+    <!-- ============ TOTENS ============ -->
+    <div class="mb-8">
+      <p class="section-title">Totens</p>
+      <div id="totemGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5"></div>
+    </div>
+
+    <!-- ============ TABELA ============ -->
+    <div>
+      <div class="flex items-center justify-between mb-3">
+        <p class="section-title mb-0">Registros de descarte</p>
+        <p class="text-cinza text-xs" id="tableCount">0 registros</p>
+      </div>
+      <div class="table-wrap">
+        <table class="records-table">
+          <thead>
+            <tr>
+              <th>Data / hora</th>
+              <th>Totem</th>
+              <th>Categoria</th>
+              <th class="text-right">Ecodots</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr><td colspan="4" class="empty-row">Carregando dados…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flex items-center justify-center gap-3 mt-4" id="pagination">
+        <button id="prevPageBtn" class="page-btn"><i class="fa-solid fa-chevron-left"></i></button>
+        <span class="text-xs text-cinza" id="pageLabel">Página 1</span>
+        <button id="nextPageBtn" class="page-btn"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="max-w-7xl mx-auto px-5 md:px-8 py-6 text-[11px] text-cinza flex items-center justify-between border-t border-linha">
+    <span>© Ecotronic Solutions</span>
+    <span id="lastUpdateLabel">—</span>
+  </footer>
+  </div><!-- /#screenDashboard -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js" defer></script>
+  <script src="config.js" defer></script>
+  <script src="api.js" defer></script>
+  <script src="pwa.js" defer></script>
+  <script src="monitoramento.js" defer></script>
+</body>
+</html>

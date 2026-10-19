@@ -1,0 +1,207 @@
+/* ===== Ecotronic — Painel de monitoramento ===== */
+
+.bg-cinza { background-color: #9CA3AF; }
+.bg-vermelho { background-color: #D2483C; }
+
+/* ---- Barra de filtros ---- */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+  padding: 16px;
+  background: #FAFDFB;
+  border: 1px solid #E7EBE8;
+  border-radius: 14px;
+}
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+.filter-field label {
+  font-size: 11px;
+  color: #6B7280;
+  font-weight: 600;
+}
+.filter-field select,
+.filter-field input[type="date"] {
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid #E7EBE8;
+  border-radius: 9px;
+  font-size: 13px;
+  background: #fff;
+  color: #0F1A16;
+}
+.filter-field select:focus,
+.filter-field input:focus {
+  outline: 2px solid #2FAE55;
+  outline-offset: 1px;
+}
+.filter-apply, .filter-clear {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background .15s ease, border-color .15s ease;
+}
+.filter-apply {
+  background: #2FAE55;
+  color: #fff;
+  border: none;
+}
+.filter-apply:hover { background: #12302A; }
+.filter-clear {
+  background: transparent;
+  color: #6B7280;
+  border: 1px solid #E7EBE8;
+}
+.filter-clear:hover { border-color: #2FAE55; color: #12302A; }
+
+/* ---- KPI cards ---- */
+.kpi-card {
+  background: #fff;
+  border: 1px solid #E7EBE8;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.kpi-icon {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.kpi-value {
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 1.1;
+  color: #0F1A16;
+}
+.kpi-label {
+  font-size: 12px;
+  color: #6B7280;
+}
+
+/* ---- Gráficos ---- */
+.chart-card {
+  background: #fff;
+  border: 1px solid #E7EBE8;
+  border-radius: 14px;
+  padding: 18px;
+}
+.chart-title {
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 14px;
+  color: #0F1A16;
+}
+.chart-wrap { position: relative; height: 240px; }
+
+/* ---- Seções ---- */
+.section-title {
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: #0F1A16;
+}
+
+/* ---- Cartões de totem ---- */
+.totem-card {
+  background: #fff;
+  border: 1px solid #E7EBE8;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.totem-card .totem-name {
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.totem-card .totem-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.totem-card .totem-stat {
+  font-size: 12px;
+  color: #6B7280;
+}
+
+/* ---- Tabela ---- */
+.table-wrap {
+  border: 1px solid #E7EBE8;
+  border-radius: 14px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+.records-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.records-table thead th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: #6B7280;
+  background: #FAFDFB;
+  padding: 12px 16px;
+  border-bottom: 1px solid #E7EBE8;
+  white-space: nowrap;
+}
+.records-table tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #F1F3F1;
+  color: #0F1A16;
+  white-space: nowrap;
+}
+.records-table tbody tr:last-child td { border-bottom: none; }
+.records-table tbody tr:hover { background: #FAFDFB; }
+.empty-row {
+  text-align: center;
+  color: #6B7280;
+  padding: 28px 16px !important;
+}
+.ecodot-pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #EAF7EE;
+  color: #12302A;
+  font-weight: 600;
+  font-size: 12.5px;
+}
+
+/* ---- Paginação ---- */
+.page-btn {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: 1px solid #E7EBE8;
+  color: #12302A;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s ease, background .15s ease;
+}
+.page-btn:hover:not(:disabled) { border-color: #2FAE55; background: #FAFDFB; }
+.page-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+@media (max-width: 640px) {
+  .filter-field { min-width: 100%; }
+  .filter-apply, .filter-clear { flex: 1; }
+}

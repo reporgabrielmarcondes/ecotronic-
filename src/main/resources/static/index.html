@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#2FAE55" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Ecotronic" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" type="image/png" href="icon-192.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<title>Ecotronic Solutions · Totem de Descarte</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="tailwind.css" />
+
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-fundo text-tinta font-body antialiased overflow-x-hidden">
+
+  <!-- ============ HEADER ============ -->
+  <header class="sticky top-0 z-30 bg-fundo/90 backdrop-blur border-b border-linha">
+    <div class="max-w-5xl mx-auto flex items-center justify-between px-5 md:px-8 h-16 md:h-20">
+      <div class="flex items-center gap-3">
+        <!-- Logo mark: stacked bars + bolt, echoing the Ecotronic identity -->
+        <svg width="34" height="34" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="2" y="6" width="18" height="6" rx="1" fill="#2FAE55"/>
+          <rect x="2" y="17" width="18" height="6" rx="1" fill="#2FAE55"/>
+          <rect x="2" y="28" width="18" height="6" rx="1" fill="#2FAE55"/>
+          <path d="M27 4 L15 22 H24 L20 36 L34 15 H25 L27 4Z" fill="#12302A"/>
+        </svg>
+        <div class="leading-tight">
+          <p class="font-display font-semibold text-[15px] md:text-base tracking-tight">ecotronic</p>
+          <p class="text-[10px] md:text-[11px] text-cinza -mt-0.5">solutions</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 text-[11px] md:text-xs text-cinza">
+        <span id="statusDot" class="w-2 h-2 rounded-full bg-verde"></span>
+        <span id="statusLabel">Totem conectado</span>
+        <span class="hidden md:inline text-linha">|</span>
+        <span class="hidden md:inline" id="totemId">Totem #SOR-01</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ TELA 0 · IDENTIFICAÇÃO (token) ============ -->
+  <main id="screenToken" class="max-w-md mx-auto px-5 md:px-8 pt-14 pb-24">
+    <div class="mb-8 text-center">
+      <span class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-verdefundo text-verdeescuro text-xl mb-4">
+        <i class="fa-solid fa-user"></i>
+      </span>
+      <p class="text-verde font-semibold text-sm tracking-tight mb-2">Antes de começar</p>
+      <h1 class="font-display font-semibold text-[26px] leading-[1.15]">Digite seu código</h1>
+      <p class="text-cinza text-[15px] mt-2">Informe o código da sua conta para acumular ecodots. Não tem conta? Pode pular.</p>
+    </div>
+
+    <div id="tokenError" class="hidden mb-4 rounded-xl bg-vermelhofundo border border-vermelho/30 text-vermelho text-sm px-4 py-3 text-center"></div>
+
+    <form id="tokenForm" class="flex flex-col gap-4">
+      <input id="tokenInput" type="text" inputmode="numeric" maxlength="6" autocomplete="off"
+        class="w-full h-16 px-4 rounded-xl border border-linha focus:border-verde focus:outline-none text-center text-2xl tracking-[0.3em] font-display font-semibold"
+        placeholder="000000" />
+
+      <button id="tokenConfirmBtn" type="submit"
+        class="h-14 rounded-xl bg-verde text-white font-semibold text-base hover:bg-verdeescuro transition-colors flex items-center justify-center gap-2">
+        <span id="tokenConfirmLabel">Confirmar</span>
+        <i class="fa-solid fa-spinner fa-spin hidden" id="tokenSpinner"></i>
+      </button>
+
+      <button id="tokenSkipBtn" type="button"
+        class="h-14 rounded-xl border border-linha text-tinta font-semibold text-base hover:bg-verdefundo/60 transition-colors">
+        Pular e descartar sem identificação
+      </button>
+    </form>
+  </main>
+
+  <!-- ============ TELA 1 · SELEÇÃO ============ -->
+  <main id="screenSelect" class="hidden max-w-5xl mx-auto px-5 md:px-8 pt-10 pb-24 md:pt-14">
+    <div class="mb-9 md:mb-12">
+      <div id="usuarioBadge" class="hidden mb-4 inline-flex items-center gap-2 rounded-full bg-verdefundo text-verdeescuro text-sm font-semibold px-4 py-2">
+        <i class="fa-solid fa-circle-check text-verde"></i>
+        <span id="usuarioBadgeNome">—</span>
+        <button id="trocarUsuarioBtn" type="button" class="text-cinza font-normal hover:text-vermelho transition-colors ml-1" title="Trocar usuário">
+          <i class="fa-solid fa-right-left"></i>
+        </button>
+      </div>
+      <p class="text-verde font-semibold text-sm tracking-tight mb-2">Ponto de descarte consciente</p>
+      <h1 class="font-display font-semibold text-[28px] leading-[1.15] md:text-[38px] max-w-xl">
+        O que você está descartando hoje?
+      </h1>
+      <p class="text-cinza text-[15px] md:text-base mt-3 max-w-md">
+        Toque na categoria correspondente ao seu resíduo. A cada descarte, você acumula ecodots.
+      </p>
+    </div>
+
+    <div id="categoryGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 md:gap-4"></div>
+  </main>
+
+  <!-- ============ OVERLAY · CONFIRMAÇÃO ============ -->
+  <div id="overlayConfirm" class="fixed inset-0 z-40 hidden">
+    <div class="absolute inset-0 bg-verdeescuro/40 backdrop-blur-sm" data-close-confirm></div>
+    <div class="absolute inset-0 flex items-end md:items-center justify-center p-4">
+      <div class="pop-card w-full max-w-sm bg-white rounded-2xl border border-linha shadow-xl p-6 md:p-7">
+        <div class="w-12 h-12 rounded-xl bg-verdefundo flex items-center justify-center mb-4" id="confirmIconWrap"></div>
+        <p class="text-cinza text-sm mb-1">Confirmar categoria</p>
+        <h2 class="font-display font-semibold text-xl mb-5" id="confirmTitle">—</h2>
+        <div class="flex gap-3">
+          <button data-close-confirm class="flex-1 h-12 rounded-xl border border-linha text-tinta font-semibold text-sm hover:bg-verdefundo/60 transition-colors">
+            Cancelar
+          </button>
+          <button id="confirmBtn" class="flex-1 h-12 rounded-xl bg-verde text-white font-semibold text-sm hover:bg-verdeescuro transition-colors">
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ OVERLAY · CHECK ANIMADO ============ -->
+  <div id="overlayCheck" class="fixed inset-0 z-50 hidden bg-white flex items-center justify-center">
+    <div class="flex flex-col items-center">
+      <svg class="check-svg" width="120" height="120" viewBox="0 0 120 120">
+        <circle class="check-circle" cx="60" cy="60" r="52" fill="none" stroke="#2FAE55" stroke-width="5"/>
+        <path class="check-mark" d="M38 62 L54 78 L84 44" fill="none" stroke="#2FAE55" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <p class="font-display font-semibold text-lg mt-5 check-label">Registrando descarte…</p>
+    </div>
+  </div>
+
+  <!-- ============ OVERLAY · RESULTADO / ECODOTS ============ -->
+  <div id="overlayResult" class="fixed inset-0 z-50 hidden bg-white">
+    <div class="h-full flex flex-col items-center justify-center px-6 text-center relative overflow-hidden">
+      <div id="dotBurst" class="pointer-events-none absolute inset-0"></div>
+
+      <p class="text-cinza text-sm mb-2" id="resultCategoryLabel">Celular</p>
+      <p class="font-display font-semibold text-cinza text-sm tracking-tight mb-1">você ganhou</p>
+      <div class="flex items-end gap-2 mb-2">
+        <span id="ecodotCount" class="font-display font-semibold text-[64px] md:text-[84px] leading-none text-verde">0</span>
+        <span class="font-display font-semibold text-2xl md:text-3xl text-verde mb-2 md:mb-3">ecodots</span>
+      </div>
+      <p class="text-cinza text-[15px] max-w-xs mb-10" id="resultMessage">
+        Obrigado por descartar de forma consciente. Isso ajuda a evitar contaminação e recupera materiais valiosos.
+      </p>
+
+      <button id="newDiscardBtn" class="h-12 px-8 rounded-xl bg-tinta text-white font-semibold text-sm hover:bg-verdeescuro transition-colors">
+        Novo descarte
+      </button>
+      <p class="text-cinza text-xs mt-4">Retornando à tela inicial em <span id="countdown">6</span>s</p>
+    </div>
+  </div>
+
+  <footer class="max-w-5xl mx-auto px-5 md:px-8 py-6 text-[11px] text-cinza flex items-center justify-between border-t border-linha mt-auto">
+    <span>© Ecotronic Solutions</span>
+    <span id="syncLabel">Sincronizado com a central de resíduos</span>
+  </footer>
+
+  <script src="config.js" defer></script>
+  <script src="api.js" defer></script>
+  <script src="pwa.js" defer></script>
+  <script src="app.js" defer></script>
+</body>
+</html>
