@@ -248,6 +248,11 @@ function renderTotens() {
 
 // ---- Gráficos ------------------------------------------------------
 function renderCharts() {
+  // Se a biblioteca de gráficos não carregou, o painel continua funcionando sem eles.
+  if (typeof Chart === "undefined") {
+    console.warn("Chart.js não carregou; gráficos desativados.");
+    return;
+  }
   renderChartDiario();
   renderChartCategorias();
 }
