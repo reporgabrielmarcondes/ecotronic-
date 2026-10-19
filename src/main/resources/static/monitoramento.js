@@ -411,15 +411,37 @@ function mostrarLogin() {
 
 // Pergunta à API Java se o usuário logado tem is_admin = true.
 // A API também bloqueia (403) qualquer chamada de dados feita por não-admin.
-async function ehAdministrador() {
+// Se a conta existe no Supabase mas ainda não tem perfil no banco, cria o perfil
+// aqui mesmo (sem precisar passar pela tela de usuário).
+// Devolve { admin: boolean, motivo: string|null }.
+async function verificarAdmin() {
   try {
-    const accessToken = await obterAccessToken(db);
-    const perfil = await apiFetch("/api/perfis/me", { accessToken });
-    return !!perfil.admin;
+    const { data } = await db.auth.getSession();
+    const user = data?.session?.user;
+    const accessToken = data?.session?.access_token;
+    if (!user || !accessToken) return { admin: false, motivo: "Sessão não encontrada." };
+
+    let perfil;
+    try {
+      perfil = await apiFetch("/api/perfis/me", { accessToken });
+    } catch (err) {
+      if (err.status !== 404) throw err;
+      const nomeMeta = user.user_metadata?.nome;
+      if (!nomeMeta) {
+        return { admin: false, motivo: "Esta conta não tem perfil. Cadastre-se pela tela de usuário." };
+      }
+      perfil = await apiFetch("/api/perfis", { method: "POST", body: { nome: nomeMeta }, accessToken });
+    }
+    if (perfil.admin) return { admin: true, motivo: null };
+    return { admin: false, motivo: "Esta conta não tem permissão de administrador." };
   } catch (error) {
     console.error("Erro ao verificar permissão de administrador:", error);
-    return false;
+    return { admin: false, motivo: "Não foi possível verificar a conta agora. Tente novamente." };
   }
+}
+
+async function ehAdministrador() {
+  return (await verificarAdmin()).admin;
 }
 
 authForm.addEventListener("submit", async (ev) => {
@@ -444,10 +466,10 @@ authForm.addEventListener("submit", async (ev) => {
     const { data, error } = await db.auth.signInWithPassword({ email, password: senha });
     if (error) throw error;
 
-    const admin = await ehAdministrador(data.user.id);
-    if (!admin) {
+    const resultado = await verificarAdmin();
+    if (!resultado.admin) {
       await db.auth.signOut();
-      mostrarErroAuth("Esta conta não tem permissão de administrador.");
+      mostrarErroAuth(resultado.motivo);
       return;
     }
 
