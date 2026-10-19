@@ -53,7 +53,10 @@ const logoutBtn = document.getElementById("logoutBtn");
 let db = null;
 try {
   if (window.supabase && SUPABASE_URL.startsWith("https://") && !SUPABASE_URL.includes("SEU-PROJETO")) {
-    db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // storageKey próprio: a sessão do painel admin fica separada da sessão da Minha Conta.
+    db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { storageKey: "ecotronic-admin-auth" },
+    });
   }
 } catch (e) {
   console.warn("Supabase não inicializado:", e);
